@@ -1,0 +1,54 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+
+/* buildscript {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://jitpack.io" }
+        maven { url = "https://repo1.maven.org/maven2/"}
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.0.2'
+    }
+}
+*/
+plugins {
+    id 'com.android.application' version '7.0.3'
+}
+
+
+task customClean(type: Delete) {
+    delete rootProject.buildDir
+}
+android {
+    namespace "com.example.cameraapp"
+    compileSdkVersion 31
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "com.example.cameraapp"
+        minSdkVersion 21
+        targetSdkVersion 31
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    // Add camera-specific configuration for CameraX
+    packagingOptions {
+        exclude 'META-INF/androidx.camera.camera_common.kotlin_module'
+    }
+}
+
+repositories {
+//    google()
+}

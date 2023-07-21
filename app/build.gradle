@@ -1,0 +1,51 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.0.3'
+    }
+}
+
+plugins {
+    id 'com.android.application' version '7.0.3'
+}
+
+android {
+    namespace "com.example.cameraapp"
+    compileSdkVersion 31
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "com.example.cameraapp"
+        minSdkVersion 21
+        targetSdkVersion 31
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    // Other configurations...
+
+    // Add camera-specific configuration for CameraX
+    packagingOptions {
+        exclude 'META-INF/androidx.camera.camera_common.kotlin_module'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    // CameraX dependencies
+    implementation 'androidx.camera.camera2:camera2:1.1.0-alpha04'
+    implementation 'androidx.camera.lifecycle:camera-lifecycle:1.1.0-alpha04'
+    implementation 'androidx.camera.view:camera-view:1.0.0-alpha29'
+}
