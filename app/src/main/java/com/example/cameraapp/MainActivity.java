@@ -20,6 +20,7 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -119,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 initializeCamera();
@@ -135,14 +138,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeCamera() {
-        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        CameraManager cameraManager = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        }
         try {
-            String cameraId = cameraManager.getCameraIdList()[0];
-            CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
+            String cameraId = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                cameraId = cameraManager.getCameraIdList()[0];
+            }
+            CameraCharacteristics characteristics = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                characteristics = cameraManager.getCameraCharacteristics(cameraId);
+            }
             Size[] jpegSizes = null;
             if (characteristics != null) {
-                jpegSizes = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
-                        .getOutputSizes(Bitmap.Config.ARGB_8888);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    jpegSizes = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+                            .getOutputSizes(Bitmap.Config.ARGB_8888.ordinal());
+                }
             }
             if (jpegSizes != null && jpegSizes.length > 0) {
                 int width = jpegSizes[0].getWidth();
